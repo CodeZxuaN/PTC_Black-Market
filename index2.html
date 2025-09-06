@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PTC Black Market</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #000;
+      color: #fff;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    #backgroundCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: #000;
+      z-index: -2;
+      display: block;
+    }
+
+    header {
+      background: linear-gradient(135deg, #1a1a1a, #333);
+      color: #fff;
+      padding: 20px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+      position: relative;
+      z-index: 10;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: bold;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+      transition: color 0.3s ease;
+    }
+
+    header h1:hover {
+      color: #ccc;
+    }
+
+    .burger {
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 30px;
+      height: 25px;
+      transition: transform 0.3s ease;
+      z-index: 15;
+    }
+
+    .burger:hover {
+      transform: scale(1.1);
+    }
+
+    .burger div {
+      background-color: #fff;
+      height: 4px;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 30px;
+      background: transparent;
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      display: none;
+      z-index: 25;
+      transition: color 0.3s ease;
+    }
+    .close-btn:hover {
+      color: #ccc;
+    }
+
+    @media (max-width: 768px) {
+      .close-btn {
+        display: block;
+      }
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: -300px;
+      width: 300px;
+      height: 100vh;
+      background: linear-gradient(180deg, #2b2b2b, #1a1a1a);
+      backdrop-filter: blur(10px);
+      color: #fff;
+      transition: left 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      padding-top: 80px;
+      overflow-y: auto;
+      z-index: 20;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+    }
+
+    nav ul {
+      list-style: none;
+      padding: 20px;
+      margin: 0;
+    }
+
+    nav ul li {
+      padding: 15px 20px;
+      border-bottom: 1px solid #444;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    nav ul li:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      transform: translateX(5px);
+    }
+
+    nav ul li a {
+      color: #fff;
+      text-decoration: none;
+      display: block;
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    nav.active {
+      left: 0;
+    }
+
+    main {
+      padding: 30px 40px;
+      position: relative;
+      z-index: 5;
+      max-width: 1200px;
+      margin: 0 auto;
+      transition: padding 0.3s ease;
+    }
+
+    .section {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(15px);
+      padding: 30px;
+      margin-bottom: 30px;
+      border-radius: 15px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .section:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .section h2 {
+      margin-top: 0;
+      font-size: 28px;
+      color: #fff;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+      margin-bottom: 15px;
+    }
+
+    .section p {
+      line-height: 1.6;
+      font-size: 16px;
+      color: #ddd;
+    }
+
+    /* Highlight style */
+    .highlight {
+      background-color: #fffa8b;
+      color: #000;
+      font-weight: 700;
+      padding: 0 4px;
+      border-radius: 3px;
+    }
+
+    /* Responsive design */
+    @media (max-width: 1024px) {
+      main {
+        padding: 25px 30px;
+      }
+      .section h2 {
+        font-size: 24px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      nav {
+        width: 100%;
+        left: -100%;
+      }
+      nav.active {
+        left: 0;
+      }
+      main {
+        padding: 20px 15px;
+      }
+      .section {
+        padding: 20px;
+      }
+      header h1 {
+        font-size: 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      header {
+        padding: 15px 20px;
+      }
+      main {
+        padding: 15px 10px;
+      }
+      .section h2 {
+        font-size: 20px;
+      }
+      nav ul li {
+        padding: 12px 15px;
+      }
+      nav ul li a {
+        font-size: 14px;
+      }
+    }
+
+    /* Custom scrollbar */
+    nav::-webkit-scrollbar {
+      width: 6px;
+    }
+    nav::-webkit-scrollbar-thumb {
+      background-color: rgba(255, 255, 255, 0.3);
+      border-radius: 3px;
+    }
+    nav::-webkit-scrollbar-track {
+      background-color: transparent;
+    }
+
+    /* Smooth animations */
+    * {
+      box-sizing: border-box;
+    }
+    .fadeInUp {
+      animation: fadeInUp 1s ease-out;
+    }
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .section:nth-child(odd) {
+      animation-delay: 0.2s;
+    }
+    .section:nth-child(even) {
+      animation-delay: 0.4s;
+    }
+
+    /* Add subtle particle effect or glow to text */
+    .glow {
+      text-shadow: 0 0 20px currentColor;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="backgroundCanvas"></canvas>
+
+  <header>
+    <h1 class="glow">PTC Black Market</h1>
+    <div class="burger" id="burger" role="button" tabindex="0" aria-label="Toggle navigation menu">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </header>
+
+  <nav id="sidebar" aria-label="Main navigation">
+    <button id="closeSidebar" aria-label="Close navigation menu" class="close-btn">&times;</button>
+    <ul>
+      <li><a href="#">Math in the Modern World</a></li>
+      <li><a href="#">PATHFIT 1 - Movement Competency</a></li>
+      <li><a href="#">Understanding the Self</a></li>
+      <li><a href="#">IT Fundamentals</a></li>
+      <li><a href="#">Civil Welfare and Training Service</a></li>
+      <li><a href="#">Discrete Structure</a></li>
+      <li><a href="#">Komunikasyon sa Akademikong Filipino</a></li>
+      <li><a href="#">Programming 1</a></li>
+      <li><a href="#">Sapateros - Pateros: History</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <div class="section fadeInUp">
+      <h2 class="glow">Disclaimer</h2>
+      <p>
+        All materials, lessons, and videos uploaded on this website are intended
+        <span class="highlight"><strong>for educational purposes only</strong></span>.
+        The contents belong to their respective authors, creators, or publishers, and we do not claim ownership unless otherwise stated.
+      </p>
+
+      <p>
+        This platform is created to help
+        <span class="highlight"><strong>BSIT students of PTC</strong></span>
+        access and organize their learning materials in one place. Any misuse, reproduction, or unauthorized distribution of the content is strictly prohibited.
+      </p>
+
+      <p>
+        By using this website, you agree that the developers are
+        <span class="highlight"><strong>not responsible</strong></span>
+        for any misuse of the materials provided here.
+      </p>
+    </div>
+
+    <div class="section fadeInUp">
+      <h2 class="glow">Developer Info</h2>
+      <p>Developed by Skilled Engineer X, specializing in web development with modern UI/UX practices. Expertise in creating smooth, animated backgrounds and responsive interfaces using vanilla HTML, CSS, and JavaScript.</p>
+      <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/3909f3ed-9c47-459c-a107-b096ef83c871.png" alt="Modern workspace desk with a sleek laptop, code editor on screen showing animated polygon background code, soft ambient lighting, minimalistic tech gadgets like a mouse and keyboard, focused on productivity and creativity in a dark-themed office" class="mt-4 rounded-lg shadow-lg" />
+    </div>
+
+    <div class="section fadeInUp">
+      <h2 class="glow">Co-Developer Info</h2>
+      <p>Co-developed with collaboration from Designer Y, who contributed to the elegant design elements, including the animated polygon background, smooth transitions, and backdrop filters for a sleek, professional look.</p>
+      <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/38a2b22f-f794-4499-91a9-004126216f80.png" alt="Collaborative design studio space with two modern desks, one with graphic design software showing UI mockups, the other with coding environment, surrounded by ergonomic chairs, creative tools like sketchbooks and color palettes, in a well-lit innovative workspace" class="mt-4 rounded-lg shadow-lg" />
+    </div>
+
+    <div class="section fadeInUp">
+      <h2 class="glow">Mission</h2>
+      <p>Our mission is to provide an exceptional, immersive online experience through innovative design. We aim to blend technology and aesthetics, ensuring every interaction feels smooth, engaging, and user-friendly, all while maintaining ethical standards and fostering positive learning environments.</p>
+    </div>
+
+    <div class="section fadeInUp">
+      <h2 class="glow">Skills & Technologies</h2>
+      <p>Leveraging HTML5 Canvas for dynamic backgrounds, CSS3 for advanced styling including gradients and blur effects, and JavaScript for seamless animations. Includes responsiveness for mobile devices and accessibility considerations.</p>
+    </div>
+  </main>
+
+  <script>
+    const burger = document.getElementById('burger');
+    const sidebar = document.getElementById('sidebar');
+    const closeBtn = document.getElementById('closeSidebar');
+
+    burger.addEventListener('click', () => {
+      sidebar.classList.toggle('active');
+      burger.classList.toggle('open');
+      burger.style.transform = burger.classList.contains('open') ? 'rotate(45deg)' : '';
+    });
+
+    burger.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        burger.click();
+      }
+    });
+
+    closeBtn.addEventListener('click', () => {
+      sidebar.classList.remove('active');
+      burger.classList.remove('open');
+      burger.style.transform = '';
+    });
+
+    // Background animation code
+    const canvas = document.getElementById('backgroundCanvas');
+    const ctx = canvas.getContext('2d');
+
+    let width, height;
+    let points = [];
+    const pointCount = 8; // More points for a fuller shape
+    const radius = 200;
+    const center = { x: 0, y: 0 };
+    const speed = 0.7;
+    const connectionOpacity = 0.8;
+
+    function resize() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+      center.x = width / 2;
+      center.y = height / 2;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    // Initialize points
+    points = [];
+    for (let i = 0; i < pointCount; i++) {
+      const angle = (i / pointCount) * 2 * Math.PI;
+      points.push({
+        x: center.x + radius * Math.cos(angle),
+        y: center.y + radius * Math.sin(angle),
+        vx: (Math.random() - 0.5) * speed,
+        vy: (Math.random() - 0.5) * speed,
+      });
+    }
+
+    function update() {
+      for (let p of points) {
+        p.x += p.vx;
+        p.y += p.vy;
+
+        const maxDist = radius + 100;
+        const dx = p.x - center.x;
+        const dy = p.y - center.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        if (dist > maxDist) {
+          const angle = Math.atan2(dy, dx);
+          const nx = Math.cos(angle);
+          const ny = Math.sin(angle);
+          const dot = p.vx * nx + p.vy * ny;
+          p.vx -= 2 * dot * nx;
+          p.vy -= 2 * dot * ny;
+          p.x = center.x + maxDist * nx;
+          p.y = center.y + maxDist * ny;
+        }
+      }
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, width, height);
+
+      // Draw connections with opacity for smoother look
+      ctx.strokeStyle = `rgba(255,255,255,${connectionOpacity})`;
+      ctx.lineWidth = 2;
+      ctx.shadowColor = 'rgba(255,255,255,0.3)';
+      ctx.shadowBlur = 10;
+      ctx.beginPath();
+      for (let i = 0; i < points.length; i++) {
+        const p = points[i];
+        if (i === 0) ctx.moveTo(p.x, p.y);
+        else ctx.lineTo(p.x, p.y);
+      }
+      ctx.closePath();
+      ctx.stroke();
+
+      // Draw inner connections for triangle effect
+      ctx.strokeStyle = `rgba(255,255,255,0.4)`;
+      ctx.lineWidth = 1;
+      for (let i = 0; i < points.length; i++) {
+        for (let j = i + 2; j < points.length; j++) {
+          if (j !== i) {
+            ctx.beginPath();
+            ctx.moveTo(points[i].x, points[i].y);
+            ctx.lineTo(points[j].x, points[j].y);
+            ctx.stroke();
+          }
+        }
+      }
+
+      // Draw dots with glow
+      ctx.shadowColor = '#fff';
+      ctx.shadowBlur = 15;
+      ctx.fillStyle = '#fff';
+      for (let p of points) {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 6, 0, 2 * Math.PI);
+        ctx.fill();
+      }
+      ctx.shadowBlur = 0;
+    }
+
+    function animate() {
+      update();
+      draw();
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    // Close sidebar on outside click
+    document.addEventListener('click', (e) => {
+      if (!sidebar.contains(e.target) && !burger.contains(e.target) && sidebar.classList.contains('active')) {
+        sidebar.classList.remove('active');
+        burger.classList.remove('open');
+        burger.style.transform = '';
+      }
+    });
+  </script>
+</body>
+</html>
+</content>
+</create_file>
