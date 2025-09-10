@@ -54,6 +54,44 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
+// Disable right-click context menu
+document.addEventListener('contextmenu', function(e) {
+  e.preventDefault();
+});
+
+// Block common screenshot and print keyboard shortcuts
+document.addEventListener('keydown', function(e) {
+  // Block Print Screen key (some browsers)
+  if (e.key === 'PrintScreen') {
+    e.preventDefault();
+    alert('Screenshots are disabled on this site.');
+  }
+
+  // Block Ctrl+S (Save)
+  if (e.ctrlKey && (e.key === 's' || e.key === 'S')) {
+    e.preventDefault();
+    alert('Saving the page is disabled.');
+  }
+
+  // Block Ctrl+P (Print)
+  if (e.ctrlKey && (e.key === 'p' || e.key === 'P')) {
+    e.preventDefault();
+    alert('Printing is disabled.');
+  }
+
+  // Block Ctrl+Shift+I (DevTools)
+  if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i')) {
+    e.preventDefault();
+    alert('Opening developer tools is disabled.');
+  }
+
+  // Block F12 (DevTools)
+  if (e.key === 'F12') {
+    e.preventDefault();
+    alert('Opening developer tools is disabled.');
+  }
+});
+
 // Lessons data
 const lessons = [
   {
