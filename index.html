@@ -328,14 +328,20 @@
 
     <div class="section fadeInUp">
       <h2 class="glow">Developer Info</h2>
-      <p>Developed by Skilled Engineer X, specializing in web development with modern UI/UX practices. Expertise in creating smooth, animated backgrounds and responsive interfaces using vanilla HTML, CSS, and JavaScript.</p>
-      <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/3909f3ed-9c47-459c-a107-b096ef83c871.png" alt="Modern workspace desk with a sleek laptop, code editor on screen showing animated polygon background code, soft ambient lighting, minimalistic tech gadgets like a mouse and keyboard, focused on productivity and creativity in a dark-themed office" class="mt-4 rounded-lg shadow-lg" />
+<p>This website was not developed simply to teach, but to reveal. Many claim they have no time to learn, yet time itself bends to the will of those who truly seek knowledge. Here, you may watch, and when you falter, you may watch again—until understanding becomes inevitable. Remember this: knowledge does not wait for the unprepared. It rewards only those who pursue it without hesitation.</p>
+<p style="text-align:right; font-style:italic;">– Aizen Sōsuke</p>
+     <img src="https://i.ibb.co/6ft9dfg/Shinigami-Aizen.png" 
+     alt="Shinigami Aizen" 
+     class="mt-4 rounded-lg shadow-lg" />
     </div>
 
     <div class="section fadeInUp">
-      <h2 class="glow">Co-Developer Info</h2>
-      <p>Co-developed with collaboration from Designer Y, who contributed to the elegant design elements, including the animated polygon background, smooth transitions, and backdrop filters for a sleek, professional look.</p>
-      <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/38a2b22f-f794-4499-91a9-004126216f80.png" alt="Collaborative design studio space with two modern desks, one with graphic design software showing UI mockups, the other with coding environment, surrounded by ergonomic chairs, creative tools like sketchbooks and color palettes, in a well-lit innovative workspace" class="mt-4 rounded-lg shadow-lg" />
+     <h2 class="glow">Co-Developer Info</h2>
+<p>Heh… this little project ain’t somethin’ too serious, y’know? Just a place where folks can drop by, watch a lesson or two, and maybe pick up what they’ve forgotten. If time’s always slippin’ away from ya, well… this site might just give it back. Funny thing about knowledge—sometimes it hides, sometimes it slips through yer fingers, but if ya look close enough… it’s always smilin’ right back at ya.</p>
+<p style="text-align:right; font-style:italic;">– Gin Ichimaru</p>
+      <img src="https://i.ibb.co/KcPTJ7Pz/98cac02fdc2ec430d04d2266f2938768.png" 
+     alt="Gin Ichimaru" 
+     class="mt-4 rounded-lg shadow-lg" />
     </div>
 
     <div class="section fadeInUp">
@@ -413,6 +419,88 @@
         p.x += p.vx;
         p.y += p.vy;
 
+        const maxDist = radius + 100;
+        const dx = p.x - center.x;
+        const dy = p.y - center.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        if (dist > maxDist) {
+          const angle = Math.atan2(dy, dx);
+          const nx = Math.cos(angle);
+          const ny = Math.sin(angle);
+          const dot = p.vx * nx + p.vy * ny;
+          p.vx -= 2 * dot * nx;
+          p.vy -= 2 * dot * ny;
+          p.x = center.x + maxDist * nx;
+          p.y = center.y + maxDist * ny;
+        }
+      }
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, width, height);
+
+      // Draw connections with opacity for smoother look
+      ctx.strokeStyle = `rgba(255,255,255,${connectionOpacity})`;
+      ctx.lineWidth = 2;
+      ctx.shadowColor = 'rgba(255,255,255,0.3)';
+      ctx.shadowBlur = 10;
+      ctx.beginPath();
+      for (let i = 0; i < points.length; i++) {
+        const p = points[i];
+        if (i === 0) ctx.moveTo(p.x, p.y);
+        else ctx.lineTo(p.x, p.y);
+      }
+      ctx.closePath();
+      ctx.stroke();
+
+      // Draw inner connections for triangle effect
+      ctx.strokeStyle = `rgba(255,255,255,0.4)`;
+      ctx.lineWidth = 1;
+      for (let i = 0; i < points.length; i++) {
+        for (let j = i + 2; j < points.length; j++) {
+          if (j !== i) {
+            ctx.beginPath();
+            ctx.moveTo(points[i].x, points[i].y);
+            ctx.lineTo(points[j].x, points[j].y);
+            ctx.stroke();
+          }
+        }
+      }
+
+      // Draw dots with glow
+      ctx.shadowColor = '#fff';
+      ctx.shadowBlur = 15;
+      ctx.fillStyle = '#fff';
+      for (let p of points) {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 6, 0, 2 * Math.PI);
+        ctx.fill();
+      }
+      ctx.shadowBlur = 0;
+    }
+
+    function animate() {
+      update();
+      draw();
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    // Close sidebar on outside click
+    document.addEventListener('click', (e) => {
+      if (!sidebar.contains(e.target) && !burger.contains(e.target) && sidebar.classList.contains('active')) {
+        sidebar.classList.remove('active');
+        burger.classList.remove('open');
+        burger.style.transform = '';
+      }
+    });
+  </script>
+</body>
+</html>
+</content>
+</create_file>
         const maxDist = radius + 100;
         const dx = p.x - center.x;
         const dy = p.y - center.y;
