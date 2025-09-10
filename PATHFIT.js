@@ -1,10 +1,7 @@
-// PATHFIT.js — with video button for every lesson
 (function () {
   'use strict';
 
-  // -----------------------
   // Lesson Data (15 lessons)
-  // -----------------------
   const lessons = [
     { title: "Lesson 01: Introduction to PATHFIT", content: "<p>Overview of PATHFIT and its goals.</p>" },
     { title: "Lesson 02: Warm-Up Basics", content: "<p>Simple warm-up routines and why they matter.</p>" },
@@ -23,18 +20,14 @@
     { title: "Lesson 15: Lifelong Movement", content: "<p>Keeping fitness sustainable across life stages.</p>" }
   ];
 
-  // -----------------------
   // DOM references
-  // -----------------------
-  const lessonListNodes = document.querySelectorAll('#pathfitLessonList');
+  const lessonListEl = document.getElementById('pathfitLessonList');
   const lessonContent = document.getElementById('pathfitLessonContent');
   const burger = document.getElementById('pathfitBurger');
   const sidebar = document.getElementById('pathfitSidebar');
   const closeBtn = document.getElementById('pathfitCloseSidebar');
 
-  // -----------------------
-  // Sidebar open/close
-  // -----------------------
+  // Sidebar open/close functions
   function openSidebar() {
     sidebar.classList.add('active');
     burger.setAttribute('aria-expanded', 'true');
@@ -47,82 +40,88 @@
     sidebar.classList.contains('active') ? closeSidebar() : openSidebar();
   }
 
-  // -----------------------
-  // Render lesson list(s)
-  // -----------------------
-  function renderLessonLists() {
-    lessonListNodes.forEach((listEl) => {
-      listEl.innerHTML = '';
-      lessons.forEach((lesson, i) => {
-        const li = document.createElement('li');
-        li.textContent = lesson.title;
-        li.setAttribute('role', 'button');
-        li.setAttribute('tabindex', '0');
-        li.dataset.index = i;
+  // Render lesson list
+  function renderLessonList() {
+    lessonListEl.innerHTML = '';
+    lessons.forEach((lesson, i) => {
+      const li = document.createElement('li');
+      li.textContent = lesson.title;
+      li.setAttribute('role', 'button');
+      li.setAttribute('tabindex', '0');
+      li.dataset.index = i;
+      li.classList.add('lesson-item');
 
-        li.addEventListener('click', () => {
+      li.addEventListener('click', () => {
+        selectLesson(i);
+        closeSidebar();
+      });
+
+      li.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
           selectLesson(i);
           closeSidebar();
-        });
-
-        li.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            selectLesson(i);
-            closeSidebar();
-          }
-        });
-
-        listEl.appendChild(li);
+        }
       });
+
+      lessonListEl.appendChild(li);
     });
   }
 
-  // -----------------------
-  // Select / display lesson
-  // -----------------------
+  // Select and display lesson content
   function selectLesson(index) {
-    lessonListNodes.forEach((listEl) => {
-      Array.from(listEl.children).forEach((child) => {
-        child.classList.remove('active');
-        child.setAttribute('aria-pressed', 'false');
-      });
-      const sel = listEl.querySelector(`[data-index="${index}"]`);
-      if (sel) {
-        sel.classList.add('active');
-        sel.setAttribute('aria-pressed', 'true');
-      }
+    // Remove active class from all lessons
+    const allLessons = lessonListEl.querySelectorAll('li');
+    allLessons.forEach(li => {
+      li.classList.remove('active');
+      li.setAttribute('aria-pressed', 'false');
     });
 
+    // Add active class to selected lesson
+    const selected = lessonListEl.querySelector(`li[data-index="${index}"]`);
+    if (selected) {
+      selected.classList.add('active');
+      selected.setAttribute('aria-pressed', 'true');
+      selected.focus();
+    }
+
+    // Update lesson content area
     const lesson = lessons[index];
     lessonContent.innerHTML = `
       <h3>${lesson.title}</h3>
       ${lesson.content}
-      <button class="video-btn" onclick="window.location.href='PEVID.html?lesson=${index + 1}'">
+      <button class="video-btn" onclick="window.location.href='PEVID.html?lesson=${index + 1}'" aria-label="Watch video for ${lesson.title}">
         🎥 Watch Video
       </button>
     `;
     lessonContent.focus();
   }
 
-  // -----------------------
-  // Event wiring
-  // -----------------------
+  // Event listeners for burger and close button
   burger.addEventListener('click', toggleSidebar);
+  burger.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      toggleSidebar();
+    }
+  });
   closeBtn.addEventListener('click', closeSidebar);
+
+  // Close sidebar on outside click
   document.addEventListener('click', (e) => {
     if (sidebar.classList.contains('active') && !sidebar.contains(e.target) && !burger.contains(e.target)) {
       closeSidebar();
     }
   });
+
+  // Close sidebar on Escape key
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && sidebar.classList.contains('active')) {
       closeSidebar();
+      burger.focus();
     }
   });
 
-  // -----------------------
   // Initialize
-  // -----------------------
-  renderLessonLists();
+  renderLessonList();
 })();
