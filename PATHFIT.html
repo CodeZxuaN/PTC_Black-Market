@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PATHFIT - Movement Enhancement Physical Activities Towards Health and Fitness</title>
+  <link rel="stylesheet" href="UTS.css" />
+</head>
+<body>
+  <header>
+    <h1 class="glow">PATHFIT</h1>
+    <div id="pathfitBurger" class="burger" tabindex="0" aria-label="Toggle navigation menu" role="button" aria-expanded="false" aria-controls="pathfitSidebar">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </header>
+
+  <!-- Sidebar for lessons -->
+  <nav id="pathfitSidebar" aria-label="Lesson navigation">
+    <button id="pathfitCloseSidebar" class="close-btn" aria-label="Close sidebar">&times;</button>
+    <div class="lesson-list">
+      <h3>PATHFIT Lessons</h3>
+      <ul id="pathfitLessonList" tabindex="0"></ul>
+    </div>
+  </nav>
+
+  <!-- Main content -->
+  <main>
+    <!-- About section -->
+    <section class="section fadeInUp">
+      <h2 class="glow">About "PATHFIT"</h2>
+      <p>
+        PATHFIT stands for <strong>Physical Activities Towards Health and Fitness</strong>. 
+        It aims to develop students’ movement skills, fitness levels, and awareness of healthy lifestyles. 
+      </p>
+      <p>
+        This course promotes physical literacy, self-discipline, and the ability to integrate fitness into everyday life 
+        for long-term health and well-being.
+      </p>
+    </section>
+
+    <!-- Lessons list section -->
+    <section class="section fadeInUp lesson-list">
+      <h3>Lessons</h3>
+      <ul id="pathfitLessonList" role="list">
+        <!-- Populated by JS -->
+      </ul>
+    </section>
+
+    <!-- Lesson content section -->
+    <section class="section fadeInUp lesson-content" tabindex="0" id="pathfitLessonContent" aria-live="polite" aria-atomic="true">
+      <h3>Welcome to PATHFIT</h3>
+      <p>Select a lesson from the sidebar to get started.</p>
+    </section>
+  </main>
+
+  <script src="PATHFIT.js"></script>
+</body>
+</html>
