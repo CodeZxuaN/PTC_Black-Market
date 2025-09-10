@@ -1,0 +1,62 @@
+<!-- UTS.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Understanding The Self - PTC Black Market</title>
+  <link rel="stylesheet" href="UTS.css" />
+</head>
+<body>
+  <header>
+    <h1 class="glow">Understanding The Self</h1>
+    <div class="burger" id="utsBurger" role="button" tabindex="0" aria-label="Toggle navigation menu">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </header>
+
+  <nav id="utsSidebar" aria-label="Main navigation">
+    <button id="utsCloseSidebar" aria-label="Close navigation menu" class="close-btn">&times;</button>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="UTS.html" aria-current="page">Understanding The Self</a></li>
+      <li><a href="#">Math in the Modern World</a></li>
+      <li><a href="#">PATHFIT 1 - Movement Competency</a></li>
+      <li><a href="#">IT Fundamentals</a></li>
+      <li><a href="#">Civil Welfare and Training Service</a></li>
+      <li><a href="#">Discrete Structure</a></li>
+      <li><a href="#">Komunikasyon sa Akademikong Filipino</a></li>
+      <li><a href="#">Programming 1</a></li>
+      <li><a href="#">Sapateros - Pateros: History</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <div class="section fadeInUp">
+      <h2 class="glow">About "Understanding The Self"</h2>
+      <p>
+        This subject explores the nature of the self, personal identity, and the factors that shape who we are.
+      </p>
+      <p>
+        Through various lessons, students will examine psychological, philosophical, and cultural perspectives on the self, helping them understand their place in society and the world.
+      </p>
+    </div>
+
+    <div class="section lesson-list fadeInUp" aria-label="Lesson list">
+      <h3>Lessons</h3>
+      <ul id="utsLessonList" role="list">
+        <!-- Lessons inserted by JS -->
+      </ul>
+    </div>
+
+    <div class="section lesson-content fadeInUp" aria-live="polite" aria-atomic="true" id="utsLessonContent" tabindex="0">
+      <p>Select a lesson to see details</p>
+      <p>Click on a lesson title from the list to view its overview and key ideas.</p>
+    </div>
+  </main>
+
+  <script src="UTS.js"></script>
+</body>
+</html>
