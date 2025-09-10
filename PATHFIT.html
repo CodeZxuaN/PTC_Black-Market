@@ -16,16 +16,28 @@
     </div>
   </header>
 
-  <!-- Sidebar for lessons -->
-  <nav id="pathfitSidebar" aria-label="Lesson navigation">
+  <!-- Sidebar for navigation and lessons -->
+  <nav id="pathfitSidebar" aria-label="Main navigation">
     <button id="pathfitCloseSidebar" class="close-btn" aria-label="Close sidebar">&times;</button>
-    <div class="lesson-list">
+    <ul>
+      <li><a href="index.html" tabindex="0">Home</a></li>
+      <li><a href="index.html#math" tabindex="0">Math in the Modern World</a></li>
+      <li><a href="PATHFIT.html" aria-current="page" tabindex="0">PATHFIT 1 - Movement Competency</a></li>
+      <li><a href="UTS.html" tabindex="0">Understanding the Self</a></li>
+      <li><a href="#" tabindex="0">IT Fundamentals</a></li>
+      <li><a href="#" tabindex="0">Civil Welfare and Training Service</a></li>
+      <li><a href="#" tabindex="0">Discrete Structure</a></li>
+      <li><a href="#" tabindex="0">Komunikasyon sa Akademikong Filipino</a></li>
+      <li><a href="#" tabindex="0">Programming 1</a></li>
+      <li><a href="#" tabindex="0">Sapateros - Pateros: History</a></li>
+    </ul>
+
+    <div class="lesson-list" aria-label="PATHFIT Lessons">
       <h3>PATHFIT Lessons</h3>
-      <ul id="pathfitLessonList" tabindex="0"></ul>
+      <ul id="pathfitLessonList" role="list" tabindex="0"></ul>
     </div>
   </nav>
 
-  <!-- Main content -->
   <main>
     <!-- About section -->
     <section class="section fadeInUp">
@@ -40,14 +52,6 @@
       </p>
     </section>
 
-    <!-- Lessons list section -->
-    <section class="section fadeInUp lesson-list">
-      <h3>Lessons</h3>
-      <ul id="pathfitLessonList" role="list">
-        <!-- Populated by JS -->
-      </ul>
-    </section>
-
     <!-- Lesson content section -->
     <section class="section fadeInUp lesson-content" tabindex="0" id="pathfitLessonContent" aria-live="polite" aria-atomic="true">
       <h3>Welcome to PATHFIT</h3>
@@ -55,6 +59,7 @@
     </section>
   </main>
 
+  <!-- Link to external JS -->
   <script src="PATHFIT.js"></script>
 </body>
 </html>
