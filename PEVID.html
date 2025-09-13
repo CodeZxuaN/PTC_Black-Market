@@ -30,7 +30,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      z-index: -1;
+      z-index: -2;
       background: #000;
     }
 
@@ -44,6 +44,8 @@
       padding: 20px;
       height: 100vh;
       justify-content: center;
+      max-width: 960px;
+      margin: 0 auto;
     }
 
     /* Back & mode buttons */
@@ -62,6 +64,7 @@
       cursor: pointer;
       font-size: 14px;
       transition: background 0.3s;
+      margin: 0 4px;
     }
     .back-btn {
       background: #e74c3c;
@@ -81,13 +84,13 @@
     /* YouTube iframe wrapper */
     .video-wrapper {
       width: 100%;
-      max-width: 960px;
       aspect-ratio: 16 / 9;
       background: #111;
       border: 2px solid #fff;
       border-radius: 12px;
       overflow: hidden;
       box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+      margin-bottom: 20px;
     }
     body.light .video-wrapper {
       border: 2px solid #000;
@@ -98,6 +101,60 @@
       height: 100%;
       border: none;
       display: block;
+    }
+
+    /* Video buttons container with polygon background */
+    .video-buttons-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 960px;
+      margin: 0 auto 40px;
+      padding: 20px 0;
+      z-index: 1;
+    }
+
+    /* Polygon SVG background */
+    .polygon-bg {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+      opacity: 0.15;
+    }
+
+    /* Video buttons container */
+    .video-buttons {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .video-buttons button {
+      background: #7aaaff;
+      color: #000;
+      font-weight: bold;
+      padding: 10px 18px;
+      border-radius: 8px;
+      border: none;
+      transition: background 0.3s;
+    }
+    .video-buttons button:hover,
+    .video-buttons button.active {
+      background: #4a6fcc;
+      color: #fff;
+    }
+    body.light .video-buttons button {
+      background: #a3c1ff;
+      color: #111;
+    }
+    body.light .video-buttons button:hover,
+    body.light .video-buttons button.active {
+      background: #6a8edc;
+      color: #fff;
     }
   </style>
 </head>
@@ -113,12 +170,21 @@
     <div class="video-wrapper">
       <iframe
         id="lessonVideo"
-        src="https://www.youtube.com/embed/NU-LwPxsrAA?rel=0&modestbranding=1&autoplay=0&controls=1"
+        src=""
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         allowfullscreen
         title="YouTube video player"
         loading="lazy"
       ></iframe>
+    </div>
+
+    <div class="video-buttons-wrapper" aria-label="Video selection buttons">
+      <svg class="polygon-bg" viewBox="0 0 960 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+        <polygon points="0,100 160,0 320,100 480,0 640,100 800,0 960,100" fill="none" stroke="white" stroke-width="2" />
+      </svg>
+      <div class="video-buttons" id="videoButtonsContainer">
+        <!-- Video buttons will be generated here -->
+      </div>
     </div>
   </div>
 
@@ -129,7 +195,7 @@
       document.body.classList.toggle('light');
     });
 
-    // Animated polygon background
+    // Animated polygon background on canvas
     const canvas = document.getElementById("bgCanvas");
     const ctx = canvas.getContext("2d");
     let w, h;
@@ -177,6 +243,92 @@
       requestAnimationFrame(animate);
     }
     animate();
+
+    // --- Video data: 2 videos per lesson (updated) ---
+    // Replace with your actual video IDs
+    const videosPerLesson = {
+      1: [
+        "NU-LwPxsrAA",  // first video
+        "m93TBopgx_8"   // second video (your provided link's ID)
+      ],
+      2: [
+        "M7lc1UVf-VE",
+        "e-ORhEE9VVg"
+      ],
+      3: [
+        "VbfpW0pbvaU",
+        "RgKAFK5djSk"
+      ],
+      // Add more lessons and videos as needed
+    };
+
+    // Parse URL parameters
+    function getQueryParams() {
+      const params = {};
+      location.search.substring(1).split("&").forEach(pair => {
+        const [key, value] = pair.split("=");
+        if (key) params[key] = decodeURIComponent(value);
+      });
+      return params;
+    }
+
+    // Update video iframe src
+    function updateVideo(lessonNum, videoNum) {
+      const videoIds = videosPerLesson[lessonNum];
+      if (!videoIds) {
+        alert("Invalid lesson number.");
+        return;
+      }
+      if (videoNum < 1 || videoNum > videoIds.length) {
+        alert("Invalid video number.");
+        return;
+      }
+      const videoId = videoIds[videoNum - 1];
+      const iframe = document.getElementById("lessonVideo");
+      iframe.src = `https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1&autoplay=0&controls=1`;
+      updateButtons(lessonNum, videoNum);
+    }
+
+    // Generate video buttons
+    function updateButtons(lessonNum, currentVideoNum) {
+      const container = document.getElementById("videoButtonsContainer");
+      container.innerHTML = "";
+      const videoIds = videosPerLesson[lessonNum];
+      if (!videoIds) return;
+
+      videoIds.forEach((vid, idx) => {
+        const btn = document.createElement("button");
+        btn.textContent = `Video ${idx + 1}`;
+        btn.setAttribute("aria-pressed", idx + 1 === currentVideoNum ? "true" : "false");
+        if (idx + 1 === currentVideoNum) {
+          btn.classList.add("active");
+          btn.disabled = true;
+        }
+        btn.addEventListener("click", () => {
+          // Update URL without reloading page, then update video
+          const newUrl = `${location.pathname}?lesson=${lessonNum}&video=${idx + 1}`;
+          history.pushState(null, "", newUrl);
+          updateVideo(lessonNum, idx + 1);
+        });
+        container.appendChild(btn);
+      });
+    }
+
+    // On page load
+    window.addEventListener("DOMContentLoaded", () => {
+      const params = getQueryParams();
+      const lessonNum = parseInt(params.lesson) || 1;
+      const videoNum = parseInt(params.video) || 1;
+      updateVideo(lessonNum, videoNum);
+    });
+
+    // Handle browser back/forward navigation
+    window.addEventListener("popstate", () => {
+      const params = getQueryParams();
+      const lessonNum = parseInt(params.lesson) || 1;
+      const videoNum = parseInt(params.video) || 1;
+      updateVideo(lessonNum, videoNum);
+    });
   </script>
 </body>
 </html>
