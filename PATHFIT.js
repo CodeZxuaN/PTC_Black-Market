@@ -1,33 +1,55 @@
 (function () {
   'use strict';
 
-  // Lesson Data (15 lessons)
+  // -----------------------
+  // Lesson Data with videos (3 videos per lesson)
+  // -----------------------
+  // Replace video IDs with your actual YouTube video IDs or URLs
   const lessons = [
-    { title: "Lesson 01: Introduction to PATHFIT", content: "<p>Overview of PATHFIT and its goals.</p>" },
-    { title: "Lesson 02: Warm-Up Basics", content: "<p>Simple warm-up routines and why they matter.</p>" },
-    { title: "Lesson 03: Dynamic Stretching", content: "<p>Dynamic stretches to prepare the body.</p>" },
-    { title: "Lesson 04: Cardiovascular Basics", content: "<p>Intro to aerobic work and endurance concepts.</p>" },
-    { title: "Lesson 05: Strength Fundamentals", content: "<p>Foundational movements for strength development.</p>" },
-    { title: "Lesson 06: Mobility Drills", content: "<p>Mobility drills to improve joint range and movement quality.</p>" },
-    { title: "Lesson 07: Balance & Coordination", content: "<p>Exercises to enhance stability and coordination.</p>" },
-    { title: "Lesson 08: Plyometrics & Power", content: "<p>Basic plyometric drills for power development.</p>" },
-    { title: "Lesson 09: Flexibility Routines", content: "<p>Static and PNF stretches for flexibility.</p>" },
-    { title: "Lesson 10: Recovery Techniques", content: "<p>Cooldowns, foam rolling, and recovery strategies.</p>" },
-    { title: "Lesson 11: Nutrition Basics", content: "<p>Simple nutrition principles for activity and recovery.</p>" },
-    { title: "Lesson 12: Injury Prevention", content: "<p>Key tips to reduce risk of common injuries.</p>" },
-    { title: "Lesson 13: Group Activity Strategies", content: "<p>How to run safe and effective group sessions.</p>" },
-    { title: "Lesson 14: Tracking Progress", content: "<p>Methods to log and measure improvement.</p>" },
-    { title: "Lesson 15: Lifelong Movement", content: "<p>Keeping fitness sustainable across life stages.</p>" }
+    {
+      title: "Lesson 01: Introduction to PATHFIT",
+      content: "<p>Overview of PATHFIT and its goals.</p>",
+      videos: [
+        "NU-LwPxsrAA",
+        "dQw4w9WgXcQ",
+        "3JZ_D3ELwOQ"
+      ]
+    },
+    {
+      title: "Lesson 02: Not Available",
+      content: "<p>Simple warm-up routines and why they matter.</p>",
+      videos: [
+        "M7lc1UVf-VE",
+        "e-ORhEE9VVg",
+        "kXYiU_JCYtU"
+      ]
+    },
+    {
+      title: "Lesson 03: Not Available",
+      content: "<p>Dynamic stretches to prepare the body.</p>",
+      videos: [
+        "VbfpW0pbvaU",
+        "RgKAFK5djSk",
+        "uelHwf8o7_U"
+      ]
+    },
+    
+    
+    // Add more lessons with videos as needed
   ];
 
+  // -----------------------
   // DOM references
-  const lessonListEl = document.getElementById('pathfitLessonList');
+  // -----------------------
+  const lessonListNode = document.getElementById('pathfitLessonList');
   const lessonContent = document.getElementById('pathfitLessonContent');
   const burger = document.getElementById('pathfitBurger');
   const sidebar = document.getElementById('pathfitSidebar');
   const closeBtn = document.getElementById('pathfitCloseSidebar');
 
-  // Sidebar open/close functions
+  // -----------------------
+  // Sidebar open/close
+  // -----------------------
   function openSidebar() {
     sidebar.classList.add('active');
     burger.setAttribute('aria-expanded', 'true');
@@ -40,16 +62,17 @@
     sidebar.classList.contains('active') ? closeSidebar() : openSidebar();
   }
 
+  // -----------------------
   // Render lesson list
+  // -----------------------
   function renderLessonList() {
-    lessonListEl.innerHTML = '';
+    lessonListNode.innerHTML = '';
     lessons.forEach((lesson, i) => {
       const li = document.createElement('li');
       li.textContent = lesson.title;
       li.setAttribute('role', 'button');
       li.setAttribute('tabindex', '0');
       li.dataset.index = i;
-      li.classList.add('lesson-item');
 
       li.addEventListener('click', () => {
         selectLesson(i);
@@ -64,64 +87,70 @@
         }
       });
 
-      lessonListEl.appendChild(li);
+      lessonListNode.appendChild(li);
     });
   }
 
-  // Select and display lesson content
+  // -----------------------
+  // Select / display lesson with multiple video buttons
+  // -----------------------
   function selectLesson(index) {
-    // Remove active class from all lessons
-    const allLessons = lessonListEl.querySelectorAll('li');
-    allLessons.forEach(li => {
-      li.classList.remove('active');
-      li.setAttribute('aria-pressed', 'false');
+    // Highlight active lesson in sidebar
+    Array.from(lessonListNode.children).forEach((child) => {
+      child.classList.remove('active');
+      child.setAttribute('aria-pressed', 'false');
     });
-
-    // Add active class to selected lesson
-    const selected = lessonListEl.querySelector(`li[data-index="${index}"]`);
-    if (selected) {
-      selected.classList.add('active');
-      selected.setAttribute('aria-pressed', 'true');
-      selected.focus();
+    const sel = lessonListNode.querySelector(`[data-index="${index}"]`);
+    if (sel) {
+      sel.classList.add('active');
+      sel.setAttribute('aria-pressed', 'true');
     }
 
-    // Update lesson content area
     const lesson = lessons[index];
+    // Build video buttons HTML
+    let videoButtonsHTML = '';
+    if (lesson.videos && lesson.videos.length > 0) {
+      videoButtonsHTML = '<div id="videoButtonsContainer" aria-label="Video selection buttons">';
+      lesson.videos.forEach((videoId, idx) => {
+        videoButtonsHTML += `
+          <button class="video-btn" 
+            onclick="window.location.href='PEVID.html?lesson=${index + 1}&video=${idx + 1}'"
+            aria-label="Watch Video ${idx + 1} of ${lesson.title}">
+            🎥 Video ${idx + 1}
+          </button>
+        `;
+      });
+      videoButtonsHTML += '</div>';
+    } else {
+      videoButtonsHTML = '<p><em>No videos available for this lesson.</em></p>';
+    }
+
     lessonContent.innerHTML = `
       <h3>${lesson.title}</h3>
       ${lesson.content}
-      <button class="video-btn" onclick="window.location.href='PEVID.html?lesson=${index + 1}'" aria-label="Watch video for ${lesson.title}">
-        🎥 Watch Video
-      </button>
+      ${videoButtonsHTML}
     `;
     lessonContent.focus();
   }
 
-  // Event listeners for burger and close button
+  // -----------------------
+  // Event wiring
+  // -----------------------
   burger.addEventListener('click', toggleSidebar);
-  burger.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      toggleSidebar();
-    }
-  });
   closeBtn.addEventListener('click', closeSidebar);
-
-  // Close sidebar on outside click
   document.addEventListener('click', (e) => {
     if (sidebar.classList.contains('active') && !sidebar.contains(e.target) && !burger.contains(e.target)) {
       closeSidebar();
     }
   });
-
-  // Close sidebar on Escape key
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && sidebar.classList.contains('active')) {
       closeSidebar();
-      burger.focus();
     }
   });
 
+  // -----------------------
   // Initialize
+  // -----------------------
   renderLessonList();
 })();
