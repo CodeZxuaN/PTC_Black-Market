@@ -1,0 +1,312 @@
+/* UTS.css */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #000;
+  color: #fff;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+header {
+  background: linear-gradient(135deg, #1a1a1a, #333);
+  color: #fff;
+  padding: 20px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  position: relative;
+  z-index: 10;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: bold;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+  transition: color 0.3s ease;
+}
+
+header h1:hover {
+  color: #ccc;
+}
+
+.burger {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 25px;
+  transition: transform 0.3s ease;
+  z-index: 15;
+}
+
+.burger:hover {
+  transform: scale(1.1);
+}
+
+.burger div {
+  background-color: #fff;
+  height: 4px;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.close-btn {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 30px;
+  background: transparent;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  display: none;
+  z-index: 25;
+  transition: color 0.3s ease;
+}
+
+.close-btn:hover {
+  color: #ccc;
+}
+
+nav {
+  position: fixed;
+  top: 0;
+  left: -300px;
+  width: 300px;
+  height: 100vh;
+  background: linear-gradient(180deg, #2b2b2b, #1a1a1a);
+  backdrop-filter: blur(10px);
+  color: #fff;
+  transition: left 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  padding-top: 80px;
+  overflow-y: auto;
+  z-index: 20;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+}
+
+nav.active {
+  left: 0;
+}
+
+nav ul {
+  list-style: none;
+  padding: 20px;
+  margin: 0;
+}
+
+nav ul li {
+  padding: 15px 20px;
+  border-bottom: 1px solid #444;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+nav ul li:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: translateX(5px);
+}
+
+nav ul li a {
+  color: #fff;
+  text-decoration: none;
+  display: block;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+main {
+  padding: 30px 40px;
+  position: relative;
+  z-index: 5;
+  max-width: 900px;
+  margin: 0 auto;
+  transition: padding 0.3s ease;
+}
+
+.section {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(15px);
+  border-radius: 15px;
+  padding: 30px;
+  margin-bottom: 30px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.section:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+}
+
+.section h2 {
+  margin-top: 0;
+  font-size: 32px;
+  color: #fff;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  margin-bottom: 15px;
+}
+
+.section p {
+  line-height: 1.6;
+  font-size: 18px;
+  color: #ddd;
+}
+
+.lesson-list h3 {
+  font-size: 28px;
+  color: #7aaaff;
+  text-shadow: 0 0 12px rgba(122, 170, 255, 0.5);
+  margin-bottom: 15px;
+}
+
+.lesson-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.lesson-list ul::-webkit-scrollbar {
+  width: 6px;
+}
+.lesson-list ul::-webkit-scrollbar-thumb {
+  background-color: rgba(122, 170, 255, 0.5);
+  border-radius: 3px;
+}
+.lesson-list ul::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.lesson-list li {
+  padding: 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  color: #ccc;
+  font-weight: 500;
+  user-select: none;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.lesson-list li:hover,
+.lesson-list li.active {
+  background-color: rgba(122, 170, 255, 0.15);
+  color: #fff;
+}
+
+.lesson-content h3 {
+  font-size: 26px;
+  color: #7aaaff;
+  text-shadow: 0 0 15px rgba(122, 170, 255, 0.7);
+  margin-bottom: 15px;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  main {
+    padding: 25px 30px;
+  }
+  .section h2 {
+    font-size: 28px;
+  }
+  .lesson-list h3 {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  nav {
+    width: 80vw;
+    left: -100%;
+  }
+  nav.active {
+    left: 0;
+  }
+  main {
+    padding: 20px 15px;
+  }
+  .section {
+    padding: 20px;
+  }
+  header h1 {
+    font-size: 20px;
+  }
+  .section h2 {
+    font-size: 26px;
+  }
+  .lesson-list h3 {
+    font-size: 20px;
+  }
+  .lesson-list li {
+    font-size: 16px;
+    padding: 12px;
+  }
+  .lesson-content h3 {
+    font-size: 22px;
+  }
+  .close-btn {
+    display: block;
+  }
+}
+
+@media (max-width: 480px) {
+  nav {
+    width: 100vw;
+  }
+  header {
+    padding: 15px 20px;
+  }
+  main {
+    padding: 15px 10px;
+  }
+  .section h2 {
+    font-size: 22px;
+  }
+  .lesson-list h3 {
+    font-size: 18px;
+  }
+  nav ul li {
+    padding: 12px 15px;
+  }
+  nav ul li a {
+    font-size: 14px;
+  }
+  .close-btn {
+    display: block;
+  }
+}
+
+/* Smooth animations */
+* {
+  box-sizing: border-box;
+}
+.fadeInUp {
+  animation: fadeInUp 1s ease-out;
+}
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.section:nth-child(odd) {
+  animation-delay: 0.2s;
+}
+.section:nth-child(even) {
+  animation-delay: 0.4s;
+}
+
+/* Glow text */
+.glow {
+  text-shadow: 0 0 20px currentColor;
+}
